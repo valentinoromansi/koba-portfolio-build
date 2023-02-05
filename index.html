@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+		<link rel="stylesheet" href="styles/shared.css">
+		<link rel="stylesheet" href="styles/sections.css">
+		<link rel="stylesheet" href="styles/navigation.css">
+		<link rel="stylesheet" href="styles/header.css">
+		<link rel="stylesheet" href="styles/gallery.css">
+		<link rel="stylesheet" href="styles/contact.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+		<script type="text/javascript">
+			var prevScrollposY = window.scrollY
+			var prevWindowW = window.innerWidth
+		</script>
+		<title>KARSON SPYKES tattoo studio</title>
+	</head>
+	<body>
+		<nav class="nav hide-top">
+	<ul>
+		 <a href="#gallery">GALLERY</a>
+		 <a href="#style">STYLE</a>
+		 <a href="#about">ABOUT</a>
+		 <a href="#contact">CONTACT</a>
+	</ul>
+</nav>
+
+
+<script type="text/javascript">
+	window.addEventListener(
+	'scroll', 
+	() => {
+			const nav = document.querySelector("nav")
+			const scrollPosY = window.scrollY
+			if (prevScrollposY >= scrollPosY)
+				nav.style.top = 0
+			else
+				nav.style.top = -nav.clientHeight + 'px'
+		}
+	)
+</script>
+		<header>
+			<div class="header-container hide-top">
+	<div class="header-item">
+		 <img src="img/scorpion-logo-white.png" style="transform: scaleX(-1)">
+	</div>
+	<div class="header-item header-item-text-container">
+		 <div class="header-container-title">
+				KARSON SPYKES
+		 </div>
+		 <div class="header-container-divider"></div>
+		 <div class="header-container-subtitle">
+				TATTOO STUDIO
+		 </div>
+	</div>
+	<div class="header-item">
+		 <img src="img/scorpion-logo-white.png">
+	</div>
+</div>
+			<div id="gallery" class="gallery-root-wrapper">
+	<div class="gallery-pagination">
+		 <div class="gallery-pagination-icon gallery-pagination-icon-left">
+				<span class="material-icons gallery-pagination-icon-symbol"> chevron_left </span>
+		 </div>
+		 <div class="gallery-pagination-icon gallery-pagination-icon-right">
+				<span class="material-icons gallery-pagination-icon-symbol"> chevron_right </span>
+		 </div>
+	</div>
+	<div class="gallery-container">
+		 <div class="gallery-wrapper">
+				<div class="gallery-item-wrapper hide-right">
+					 <div class="gallery-item" style="background-image: url('img/gallery/2.jpg')"></div>
+				</div>
+				<div class="gallery-item-wrapper hide-right">
+					 <div class="gallery-item" style="background-image: url('img/gallery/3.jpg')"></div>
+				</div>
+				<div class="gallery-item-wrapper hide-right">
+					 <div class="gallery-item" style="background-image: url('img/gallery/4.jpg')"></div>
+				</div>
+				<div class="gallery-item-wrapper">
+					 <div class="gallery-item" style="background-image: url('img/gallery/5.png')"></div>
+				</div>
+				<div class="gallery-item-wrapper">
+					 <div class="gallery-item" style="background-image: url('img/gallery/2.jpg')"></div>
+				</div>
+				<div class="gallery-item-wrapper">
+					 <div class="gallery-item" style="background-image: url('img/gallery/3.jpg')"></div>
+				</div>
+				<div class="gallery-item-wrapper">
+					 <div class="gallery-item" style="background-image: url('img/gallery/4.jpg')"></div>
+				</div>
+				<div class="gallery-item-wrapper">
+					 <div class="gallery-item" style="background-image: url('img/gallery/5.png')"></div>
+				</div>
+		 </div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	const galleryWrapper = document.querySelector('.gallery-wrapper')
+	const itemWrappers = document.querySelectorAll('.gallery-item-wrapper')
+	const items = Array.from(document.querySelectorAll('.gallery-item'))
+
+	// Recalculate 'transform' base on 'curGalleryPage'
+	function updateGallerySliderPos() {
+		// Rest when number of displayed items change
+		if(getGalleryItemsDisplayNum(window.innerWidth) !== getGalleryItemsDisplayNum(prevWindowW))
+			curGalleryPage = 1
+		// Recalculate slider position
+		const width = parseInt(window.getComputedStyle(itemWrappers[0]).width)
+		const padding = parseInt(window.getComputedStyle(document.querySelector('.gallery-item-wrapper')).padding)
+		const moveTo = (curGalleryPage - 1) * -width
+		galleryWrapper.style.transform = `translateX(${moveTo}px)`
+	}
+	
+	function getGalleryItemsDisplayNum(windowWidth) {
+		return windowWidth < 600 ? 2 : 3
+	}
+	
+	// first 3 visible images are with indexes 0, 1, 2. 'curGalleryPage' represent the one in the center.
+	var curGalleryPage = 1
+	function onGalleryPaginationClick(direction) {
+		const leftSlideStopped = direction == 1 && curGalleryPage === 1
+		const rightSlideStopped = direction == -1 && curGalleryPage + (getGalleryItemsDisplayNum(window.innerWidth) - 1) >= items.length
+		if(leftSlideStopped || rightSlideStopped)
+			return
+		curGalleryPage += -direction
+		updateGallerySliderPos()
+	}  
+	
+	
+	
+	document.querySelector('.gallery-pagination-icon-left').addEventListener('click', () => onGalleryPaginationClick(1))
+	document.querySelector('.gallery-pagination-icon-right').addEventListener('click', () => onGalleryPaginationClick(-1))
+	
+	function adjustGallerySize() {
+		const containerW = parseInt(window.getComputedStyle(document.querySelector('.gallery-container')).width, 10)
+		galleryWrapper.style.width = (containerW / getGalleryItemsDisplayNum(window.innerWidth)) * itemWrappers.length + 'px'
+		const wrapperW = parseInt(window.getComputedStyle(galleryWrapper).width, 10) 
+		itemWrappers.forEach(el => el.style.width = wrapperW / itemWrappers.length + 'px')
+	}
+	
+	window.addEventListener('resize', () => {
+		adjustGallerySize()
+		galleryWrapper.style.transition = "none"
+		updateGallerySliderPos()
+		galleryWrapper.style.transition = "transform 0.3s"
+	})
+	
+	
+	// Remove gallery resize transition on first 3 items after transition is initialy shown because it breaks component on window resize
+	setTimeout(() => {
+		const wrappers = document.querySelectorAll(".gallery-item-wrapper")
+		wrappers.forEach(el => el.classList.remove("hide-right", "show"))
+	}, 1500)
+	
+	// Call on load
+	adjustGallerySize()
+	
+</script>
+		</header>
+		<section id="style" class="p-16 bg-black"> 
+	<div class="section-content col-white">
+		<div class="section-text-wrapper hide-left" id="style-text-wrapper">
+			<p class="">The Ultimate Form of Fan Devotion</p>
+			<p class="">KARSON SPYKES カーソン</p>
+			<p class="">KARSON SPYKES is a good boy who loves one piece and gommu gommu gummy boy. These tattoos feature characters and designs from manga, anime, and games, are aimed at otaku artists! This is a form of expression that mirrors the passions and interests of contemporary otaku! This generation’s heroes are not from the suikouden, but from EVangelion, One Piece, and Final Fantasy. These are the modern Japanese myths that offer courage, inspiration, and ideals, making them perfect for tattoo subjects. </p>
+		</div>
+		<div class="section-img-wrapper hide-right">
+			<img class="section-img" src="img/ace.png">
+		</div>
+	</div>
+</section>
+
+<section id="about" class="p-16 bg-white">
+	<div class="section-content col-black">
+		<div class="section-img-wrapper hide-left">
+			<img class="section-img" src="img/ace.png">
+		</div>
+		<div class="section-text-wrapper hide-right" id="about-text-wrapper">
+			<p class="">About KARSON SPYKES</p>
+			<p class="">KARSON SPYKES is a good boy who loves one piece and gommu gommu gummy boy. <br><br>These tattoos feature characters and designs from manga, anime, and games, are aimed at otaku artists! This is a form of expression that mirrors the passions and interests of contemporary otaku! This generation’s heroes are not from the suikouden, but from EVangelion, One Piece, and Final Fantasy. <br><br> These are the modern Japanese myths that offer courage, inspiration, and ideals, making them perfect for tattoo subjects. These tattoos feature characters and designs from manga, anime, and games, are aimed at otaku artists! This is a form of expression that mirrors the passions and interests of contemporary otaku! This generation’s heroes are not from the suikouden, but from EVangelion, One Piece, and Final Fantasy. </p>
+		</div>
+	</div>
+</section>
+
+
+<script type="text/javascript">
+	function isInViewport(el) {
+	  const rect = el.getBoundingClientRect()
+	  return rect.top < window.innerHeight && Math.abs(rect.top) < window.innerHeight
+	}
+
+	const parallaxImgs = Array.from(document.querySelectorAll('.section-img'))
+	const parallaxSpeed = 1.4
+	//const startingImgagesPos = parallaxImgs.map(e => img.getBoundingClientRect().top)
+	window.addEventListener('scroll', () => {
+	  parallaxImgs.forEach(img => {
+	    if(isInViewport(img)) {
+				const scrollDir = prevScrollposY < window.scrollY ? 1 : -1
+	      img.style.top = parseInt(getComputedStyle(img).top) + (scrollDir * parallaxSpeed) + 'px'
+	    }
+	  })
+	})
+</script>
+		<div id="contact" class="p-16 bg-black p-bot-64">
+	<div class="section-content justify-content-center contact-title-wrapper col-white hide-opacity">
+		<p class="contact-title">CONTACT</p>
+	</div>
+	<div class="social-media-container section-content justify-content-center hide-opacity">
+		<a href="https://instagram.com/kspykes_ttt?igshid=ZDdkNTZiNTM=" target="_blank" class="social-media-a fa-brands fa-instagram"></a>
+		<a href="https://www.tiktok.com/@kspykes_ttt?_t=8ZWU1OiBj2j&_r=1" target="_blank" class="social-media-a fa-brands fa-tiktok"></a>
+	</div>
+	<form action="https://formsubmit.co/drunkbearzz@gmail.com" method="POST" class="section-content contact-form hide-opacity">
+		<input type="hidden" name="_subject" value="Mail received from 'KARSON SPYKES tattoo studio' website!">
+		<input type="hidden" name="_next" value="https://koba-web-form-message.onrender.com">
+		<input placeholder="Name" type="text" name="name" autocomplete="off" required>
+		<br>
+		<input placeholder="Email" type="text" name="email" required autocomplete="off">
+		<br>
+		<textarea placeholder="Message" name="message" autocomplete="off" rows="6" required></textarea>
+		<br>
+		<input type="submit" value="SEND MESSAGE">
+	</form>
+</div>
+	<script type="text/javascript">
+	window.addEventListener('scroll', () => prevScrollposY = window.scrollY)
+	window.addEventListener('resize', () => prevWindowW = window.innerWidth)
+	/*
+	 * Animations
+	 */
+	const observer = new IntersectionObserver((elements) => {
+	  elements.forEach(el => {
+	    if(el.isIntersecting)
+	      el.target.classList.add('show')
+	  })
+	})
+
+	const animatedElements = [
+	  ...document.querySelectorAll(".hide-top"),
+	  ...document.querySelectorAll(".hide-left"),
+	  ...document.querySelectorAll(".hide-right"),
+	  ...document.querySelectorAll(".hide-opacity")
+	]
+	animatedElements.forEach(el => observer.observe(el))
+</script></body></html>
